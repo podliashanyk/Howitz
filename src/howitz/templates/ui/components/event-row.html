@@ -1,8 +1,6 @@
-{% if event_list|length>0 %}
-{% for event in event_list %}
 <tr
         class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-        id="event-table-row-{{ event.id }}"
+        id="event-table-row-{{ id }}"
 >
     {% with event=event %}
     {% include "event.html" %}
@@ -10,5 +8,9 @@
 
 </tr>
 
-{% endfor %}
-{% endif %}
+
+<div
+        id="update-event-status-modal"
+        hx-swap-oob="delete"
+>
+</div>

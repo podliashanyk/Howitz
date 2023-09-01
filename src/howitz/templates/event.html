@@ -8,21 +8,85 @@
 <td class="px-6 py-4 border border-slate-700">{{ event.router }}</td>
 <td class="px-6 py-4 border border-slate-700">{{ event.port }}</td>
 <td class="px-6 py-4 border border-slate-700">{{ event.description }}</td>
-<td
-        id="toggle-row-btn-{{ event.id }}"
-        class="px-6 py-4 border border-slate-700"
-        hx-get="/events/{{ event.id }}/show_details"
-        hx-trigger="click from:#svg-icon-{{ event.id }}"
-        hx-indicator="#indicator-{{ event.id }}"
-        hx-target="#accordion-collapse-row-{{ event.id }}"
-        hx-swap="afterend"
->
-    <svg
-            id="svg-icon-{{ event.id }}"
-            class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 
-        <path fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd"></path>
-    </svg>
+<td
+        id="show-event-details-btn-{{ event.id }}"
+        class="px-6 py-4 border border-slate-700"
+>
+    <button
+            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            hx-get="/events/{{ event.id }}/show_details"
+            hx-target="body"
+            hx-swap="beforeend"
+            data-modal-target="event-details-modal" data-modal-toggle="event-details-modal"
+    >
+        Details
+    </button>
+
 </td>
+
+<td
+        id="update-event-status-btn-{{ event.id }}"
+        class="px-6 py-4 border border-slate-700"
+>
+    <button
+            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            hx-get="/event/{{ event.id }}/update_status"
+            hx-target="body"
+            hx-swap="beforeend show:#update-event-form-{{ event.id }}:bottom"
+    >
+        Update Status
+    </button>
+
+</td>
+
+<td
+        id="clear-flapping-btn-{{ event.id }}"
+        class="px-6 py-4 border border-slate-700"
+>
+    <button
+            disabled
+            class="font-medium text-blue-500 dark:text-blue-400 cursor-not-allowed"
+            hx-get="/event/{{ event.id }}/update_status"
+            hx-target="body"
+            hx-swap="beforeend"
+    >
+        Clear Flapping
+    </button>
+
+</td>
+
+<td
+        id="poll-event-btn-{{ event.id }}"
+        class="px-6 py-4 border border-slate-700"
+>
+    <button
+            disabled
+            class="font-medium text-blue-500 dark:text-blue-400 cursor-not-allowed"
+            hx-get="/event/{{ event.id }}/update_status"
+            hx-target="body"
+            hx-swap="beforeend"
+    >
+        Poll
+    </button>
+
+</td>
+
+<!--<td-->
+<!--        id="toggle-row-btn-{{ event.id }}"-->
+<!--        class="px-6 py-4 border border-slate-700"-->
+<!--        hx-get="/events/{{ event.id }}/show_details"-->
+<!--        hx-trigger="click from:#svg-icon-{{ event.id }}"-->
+<!--        hx-indicator="#indicator-{{ event.id }}"-->
+<!--        hx-target="#accordion-collapse-row-{{ event.id }}"-->
+<!--        hx-swap="afterend"-->
+<!--&gt;-->
+<!--    <svg-->
+<!--            id="svg-icon-{{ event.id }}"-->
+<!--            class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">-->
+
+<!--        <path fill-rule="evenodd"-->
+<!--              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"-->
+<!--              clip-rule="evenodd"></path>-->
+<!--    </svg>-->
+<!--</td>-->

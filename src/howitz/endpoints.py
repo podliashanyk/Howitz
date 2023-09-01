@@ -144,25 +144,25 @@ def get_events():
 
 @app.route('/events/<i>/show_details', methods=["GET"])
 def show_event_details(i):
-    with app.app_context():
-        expanded_events.append(i)
+    # with app.app_context():
+    #     expanded_events.append(i)
     # print("EXPANDED EVENTS", expanded_events)
     event_attr, event_logs, event_history, event_msgs = get_event_details(i)
     event = create_table_event(event_engine.create_event_from_id(int(i)))
 
-    return render_template('event-details.html', event=event, id=i, event_attr=event_attr, event_logs=event_logs,
+    return render_template('/ui/elements/event-details-modal.html', event=event, id=i, event_attr=event_attr, event_logs=event_logs,
                            event_history=event_history, event_msgs=event_msgs)
 
 
 @app.route('/events/<i>/hide_details', methods=["GET"])
 def hide_event_details(i):
-    with app.app_context():
-        expanded_events.remove(i)
+    # with app.app_context():
+    #     expanded_events.remove(i)
     # print("EXPANDED EVENTS", expanded_events)
 
     # event = create_table_event(event_engine.create_event_from_id(int(i)))
 
-    return render_template('hide-event-details.html', id=i)
+    return render_template('ui-generic-hidden.html', id=i)
     # return render_template('ui/components/event-row-collapsed.html', event=event, id=i)
 
 
@@ -170,6 +170,9 @@ def hide_event_details(i):
 def update_event_status(i):
     event_id = int(i)
     current_state = get_event_attributes(event_id)['adm_state']
+
+    event_attr, event_logs, event_history, event_msgs = get_event_details(event_id)
+    event = create_table_event(event_engine.create_event_from_id(event_id))
 
     if request.method == 'POST':
         new_state = request.form['event-state']
@@ -190,12 +193,14 @@ def update_event_status(i):
         event_attr, event_logs, event_history, event_msgs = get_event_details(event_id)
         event = create_table_event(event_engine.create_event_from_id(event_id))
 
-        return render_template('ui/components/event-row-expanded.html', event=event, id=event_id, event_attr=event_attr, event_logs=event_logs,
+        return render_template('/ui/components/event-row.html', event=event, id=event_id, event_attr=event_attr, event_logs=event_logs,
                                event_history=event_history, event_msgs=event_msgs)
 
     elif request.method == 'GET':
         # print("CURRENT STATE", current_state)
-        return render_template('ui-update-event-status-form.html', id=i, current_state=current_state)
+        return render_template('/ui/elements/update-status-modal-htmx.html', id=i, current_state=current_state,
+                               event=event, event_attr=event_attr, event_logs=event_logs,
+                               event_history=event_history, event_msgs=event_msgs)
 
 
 @app.route('/event/<i>/update_status/cancel', methods=["GET"])
