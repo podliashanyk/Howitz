@@ -7,7 +7,7 @@ Play around
 
 Make and activate a virtualenv, install dependencies in that virtualenv::
 
-        $ python -m venv howitz
+        $ python3.11 -m venv howitz
         $ source howitz/bin/activate
         $ pip install -r requirements.txt
 
@@ -22,7 +22,7 @@ pip install --force-reinstall zinolib-example.whl
 CD into the source and run a a local webserver::
 
         $ cd src
-        $ python howitz
+        $ python3.11 howitz
 
 You should now have a server running on http://127.0.0.1:9000/ (Port chosen not
 to clash with other things.)
