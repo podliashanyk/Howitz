@@ -11,6 +11,14 @@ Make and activate a virtualenv, install dependencies in that virtualenv::
         $ source howitz/bin/activate
         $ pip install -r requirements.txt
 
+
+On this branch you need a version of zinolib that is still a work-in-progress (hmpf's decoupling branch).
+Build it with f.e. `pyproject-build`. Make sure that zinolib dependency is reinstalled as the newly built wheel file.
+
+```
+pip install --force-reinstall zinolib-example.whl
+```
+
 CD into the source and run a a local webserver::
 
         $ cd src
