@@ -5,21 +5,18 @@
 >
     <td colspan="100">
 
-        <p id="indicator-{{ id }}" class="htmx-indicator">LOADING...</p>
-
         <div
-                id="accordion-collapse-body-{{ id }}"
-                aria-labelledby="accordion-collapse-row-{{ id }}"
-                class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+                id="accordion-body-{{ id }}"
+                aria-labelledby="event-accordion-row-{{ id }}"
+                class="p-2 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 
             <div
-                    class="grid grid-cols-1 content-between gap-4 divide-y-4 divide-slate-500"
+                    class="grid grid-cols-1 content-between"
             >
 
                 {% with id=id %}
                 {% include "ui-event-actions-buttons.html" %}
                 {% endwith %}
-
 
                 <div
                         class="flex grow-0 gap-5 justify-evenly"
@@ -36,17 +33,7 @@
                         {% endwith %}
                     </div>
                 </div>
-
             </div>
-
-
         </div>
-
     </td>
 </tr>
-
-{% with id=id %}
-{% include "ui-collapse-row-btn.html" %}
-{% endwith %}
-
-
