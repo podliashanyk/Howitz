@@ -26,3 +26,14 @@ CD into the source and run a a local webserver::
 
 You should now have a server running on http://127.0.0.1:9000/ (Port chosen not
 to clash with other things.)
+
+```
+cd ..
+python3.11 -m venv howitz
+source howitz/bin/activate
+pip install -e .
+pip install --force-reinstall ./dist/zinolib-0.9.23.dev14+g69cd772.d20230912-py3-none-any.whl
+cd src
+python3.11 -m howitz
+
+```
