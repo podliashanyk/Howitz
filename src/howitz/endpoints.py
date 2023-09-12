@@ -6,11 +6,8 @@ from flask_assets import Bundle, Environment
 import logging
 from datetime import datetime, timezone
 
-# todo remove all use of curitz when zinolib is ready
-from curitz import cli
-
-from zinolib.zino1 import Zino1EventEngine, EventAdapter, HistoryAdapter, convert_timestamp
-from zinolib.event_types import EventType, Event, EventEngine, HistoryEntry, LogEntry, AdmState, PortState, BFDState, \
+from zinolib.zino1 import Zino1EventEngine, EventAdapter, HistoryAdapter
+from zinolib.event_types import EventType, Event, HistoryEntry, LogEntry, AdmState, PortState, BFDState, \
     ReachabilityState
 from zinolib.ritz import ritz, parse_tcl_config
 
@@ -80,14 +77,9 @@ def create_table_event(event):
         common["description"] = event.description
         common["port"] = event.port
 
-        age = datetime.now(timezone.utc) - event.opened
-        # common["age"] = cli.strfdelta(age, "{days:2d}d {hours:02}:{minutes:02}")
-        # common["age"] = '{day:2d}d {hours:02}:{minutes:02}'.format(age, "day", "hours", "minutes")
-        common["age"] = age
-        # common["age"] = age.strftime('{days:2d}d {hours:02}:{minutes:02}')
+        common["age"] = event.get_age()
 
         if event.type == Event.Type.PORTSTATE:
-            # common["downtime"] = cli.downtimeShortner(event.get_downtime())
             common["downtime"] = event.get_downtime()
         else:
             common["downtime"] = ""
