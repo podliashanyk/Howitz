@@ -8,5 +8,5 @@ __all__ = [
 
 def authenticate_user(username, password):
     user = database.get(username)
-    user.authenticate(password):
+    user.authenticate(password)
     return user
