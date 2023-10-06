@@ -1,10 +1,10 @@
 from enum import StrEnum
 
 import flask
-from flask import render_template, request
+from flask import render_template, request, make_response
 from datetime import datetime, timezone
 
-from flask_login import login_required, login_user
+from flask_login import login_required, login_user, current_user
 from zinolib.zino1 import EventAdapter, HistoryAdapter
 from zinolib.event_types import EventType, Event, HistoryEntry, LogEntry, AdmState, PortState, BFDState, ReachabilityState
 
@@ -137,7 +137,13 @@ def events():
 
 @app.route('/login')
 def login():
-    return render_template('/views/login.html')
+    print("current user", current_user.is_authenticated)
+    if current_user.is_authenticated:
+        default_url = flask.url_for('index')
+        # print("DEFAULT URL", default_url)
+        return flask.redirect(default_url)
+    else:
+        return render_template('/views/login.html')
 
 @app.route('/sign_in_form')
 def sign_in_form():
@@ -149,17 +155,28 @@ def auth():
     password = request.form["password"]
 
     user = authenticate_user(username, password)
-    if user.is_authenticated:
+    if user:
         print("User", user)
         login_user(user)
         flask.flash('Logged in successfully.')
+
+        next_url = request.args.get('next', '')
+        default_url = flask.url_for('index')
+        print("NEXT URL", next_url)
+        print("DEFAULT URL", default_url)
+
         # redirect to /events
+        resp = make_response()
+        resp.headers['HX-Redirect'] = '/events'
+        return resp
     else:
         pass
         # raise error
         # show login form again with error?
-
-    #return render_template('/views/events.html')
+        # todo fix swap with err
+        resp = make_response()
+        resp.headers['HX-Redirect'] = '/login'
+        return resp
 
 
 @app.route('/events-table.html')
