@@ -124,6 +124,7 @@ def get_event_details(id):
 
 @app.route('/')
 @app.route('/hello-world')
+@login_required
 def index():
     exemplify_loop = list('abracadabra')
     return render_template('index.html', example_list=exemplify_loop)
@@ -159,11 +160,6 @@ def auth():
         print("User", user)
         login_user(user)
         flask.flash('Logged in successfully.')
-
-        next_url = request.args.get('next', '')
-        default_url = flask.url_for('index')
-        print("NEXT URL", next_url)
-        print("DEFAULT URL", default_url)
 
         # redirect to /events
         resp = make_response()
