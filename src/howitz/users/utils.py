@@ -1,4 +1,4 @@
-from . import database
+from howitz import database
 
 
 __all__ = [
@@ -8,5 +8,6 @@ __all__ = [
 
 def authenticate_user(username, password):
     user = database.get(username)
-    user.authenticate(password)
-    return user
+    if user and user.authenticate(password):
+        return user
+    return None
