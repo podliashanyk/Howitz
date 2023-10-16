@@ -1,3 +1,4 @@
+import argparse
 import os
 
 import flask
@@ -13,14 +14,13 @@ from zinolib.ritz import ritz
 from zinolib.zino1 import Zino1EventEngine, EventAdapter, HistoryAdapter
 from zinolib.event_types import EventType, Event, HistoryEntry, LogEntry, AdmState, PortState, BFDState, \
     ReachabilityState
-from zinolib.compat import StrEnum
+from zinolib.compat import StrEnum, tomlload
+from zinolib.config.zino1 import ZinoV1Config
 
 from howitz.users.db import UserDB
 from howitz.users.utils import authenticate_user, update_token
 from .utils import login_check
 
-# todo remove all use of curitz when zinolib is ready
-from curitz import cli
 # todo remove
 import time
 
@@ -44,7 +44,7 @@ dictConfig({
         'formatter': 'default'
     }},
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['wsgi']
     }
 })
@@ -73,6 +73,21 @@ ZINO_SERVER_CONFIG = {
     'Server': 'hegre.uninett.no',
     'Port': '8001',
 }
+# filepath = os.path.join(app.instance_path, '.ritz.toml')
+filepath = open('./.ritz.toml', 'rb')
+filename = tomlload(filepath)
+app.logger.info('TOML filename %s', filename)
+config = ZinoV1Config.from_toml(filename)
+# args = argparse.ArgumentParser(sort_by="upd-rev")
+parser = argparse.ArgumentParser()
+parser.add_argument("sort_by")
+parser.add_argument("upd")
+args = parser.parse_args(["sort_by", "upd"])
+config.update_from_args(args)
+# zino_session = ritz(
+#     ZINO_SERVER_CONFIG['Server'],
+#     timeout=30,
+# )
 zino_session = ritz(
     ZINO_SERVER_CONFIG['Server'],
     timeout=30,
@@ -134,14 +149,18 @@ def get_current_events():
     events = event_engine.events
     app.logger.debug('EVENTS %s', events)
 
-    events_sorted = {k: events[k] for k in sorted(events,
-                                                  key=lambda k: (
-                                                      0 if events[k].adm_state == AdmState.IGNORED else 1,
-                                                      events[k].updated,
-                                                  ), reverse=True)}
+    # events_sorted = {k: events[k] for k in sorted(events,
+    #                                               key=lambda k: (
+    #                                                   0 if events[k].adm_state == AdmState.IGNORED else 1,
+    #                                                   events[k].updated,
+    #                                               ), reverse=True)}
+    #
+    # table_events = []
+    # for c in events_sorted.values():
+    #     table_events.append(create_table_event(c))
 
     table_events = []
-    for c in events_sorted.values():
+    for c in events.values():
         table_events.append(create_table_event(c))
 
     return table_events
